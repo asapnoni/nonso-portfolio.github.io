@@ -1,0 +1,696 @@
+/* ====================================================================
+   NONSO'S PORTFOLIO: style.css  (black & white theme)
+   ====================================================================
+
+   TABLE OF CONTENTS  (use Ctrl+F and search the number, e.g. "7.")
+     1.  Fonts
+     2.  Colours and settings   <- change the look of the whole site here
+     3.  Reset and base styles
+     4.  Reusable pieces        (headings, buttons)
+     5.  Header and menu
+     6.  Shared section helpers (.section, .dark, .split)
+     7.  HOME: hero            (photo + big name)
+     8.  HOME: about
+     9.  HOME: education
+    10.  HOME: project cards   (the arch shapes)
+    11.  Call-to-action band
+    12.  Footer
+    13.  Page banner           (top of Projects and Contact pages)
+    14.  PROJECTS page         (project blocks, gallery, lightbox)
+    15.  CONTACT page          (details + form + errors)
+    16.  Responsive rules      (tablet and phone)
+    17.  Reduced motion
+
+   HOW TO READ A CSS RULE:
+     .class-name {            <- "which element?" (a dot means a class)
+       property: value;       <- "what should change?"
+     }
+   The class names match the class="..." attributes in the HTML files.
+   ==================================================================== */
+
+
+/* ====================================================================
+   1. FONTS
+   The font files are stored in the "fonts" folder, so the site looks
+   the same even offline. Bebas Neue = tall headings. Inter = body text.
+   ==================================================================== */
+@font-face {
+  font-family: "Bebas Neue";
+  src: url("fonts/bebas-neue-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;  /* show text immediately, swap in the font when loaded */
+}
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/inter-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/inter-latin-600-normal.woff2") format("woff2");
+  font-weight: 600;    /* the semi-bold used for labels and small caps text */
+  font-display: swap;
+}
+
+
+/* ====================================================================
+   2. COLOURS AND SETTINGS
+   These are "variables". Elsewhere you will see var(--black), which
+   means "use whatever --black is set to here". Change a value once
+   and it updates everywhere on the site.
+   ==================================================================== */
+:root {
+  /* Colours */
+  --black: #0c0c0c;        /* main black: dark sections, buttons, text */
+  --white: #ffffff;        /* main white */
+  --paper: #f5f5f5;        /* very light grey: alternate project blocks */
+  --mist: #ebebeb;         /* light grey: project card background */
+  --line: #d6d6d6;         /* thin divider lines and borders */
+  --grey: #6b6b6b;         /* secondary text on white backgrounds */
+  --grey-light: #b3b3b3;   /* secondary text on black backgrounds */
+  --error: #c0182d;        /* red, used ONLY for form error messages */
+
+  /* Fonts. After the first name comes a backup in case the font fails to load */
+  --display: "Bebas Neue", "Arial Narrow", Impact, sans-serif;  /* headings */
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;  /* paragraphs */
+
+  /* Maximum width of the content area on big screens */
+  --wrap: 1120px;
+}
+
+
+/* ====================================================================
+   3. RESET AND BASE STYLES
+   Browsers add their own default spacing. These rules remove it so the
+   page looks the same everywhere, then set the page-wide defaults.
+   ==================================================================== */
+
+/* Makes width include padding and border, so sizes behave predictably */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+/* Smooth scrolling when a link jumps to a section on the same page */
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--body);
+  color: var(--black);
+  background: var(--white);
+  line-height: 1.65;                 /* space between lines of text */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Added by script.js while the lightbox is open, to stop the page behind it scrolling */
+body.no-scroll { overflow: hidden; }
+
+img { display: block; max-width: 100%; height: auto; }  /* images never overflow their box */
+h1, h2, h3, p, ul, dl, figure { margin: 0; }            /* remove default gaps */
+ul { padding: 0; list-style: none; }
+a { color: inherit; }                                   /* links take the colour of their surroundings */
+
+/* The outline shown when someone tabs through the page with a keyboard */
+:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+
+/* .wrap: centres the content and stops it getting too wide on big screens */
+.wrap { max-width: var(--wrap); margin-inline: auto; padding-inline: 24px; }
+
+/* "Skip to content" link: hidden off-screen until a keyboard user focuses it */
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 100;
+  background: var(--white);
+  color: var(--black);
+  padding: 10px 16px;
+  border-radius: 8px;
+}
+.skip-link:focus { top: 12px; }
+
+
+/* ====================================================================
+   4. REUSABLE PIECES
+   Small styles used in many places across all pages.
+   ==================================================================== */
+
+/* ---- .display: the big, tall, uppercase heading style ---- */
+.display {
+  font-family: var(--display);
+  text-transform: uppercase;
+  line-height: 0.92;           /* tight lines for big headings */
+  letter-spacing: 0.01em;
+}
+
+/* ---- .eyebrow: the tiny label above a heading ("SELECTED WORK") ---- */
+.eyebrow {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+.dark .eyebrow,
+.hero .eyebrow { color: var(--grey-light); }   /* lighter grey on black backgrounds */
+
+/* ---- .btn: the pill-shaped button used everywhere ----
+   Default look = outlined. Add "btn-solid" in the HTML for a filled one. */
+.btn {
+  display: inline-block;
+  padding: 0.85rem 2rem;
+  border: 1.5px solid currentColor;   /* border takes the text colour */
+  border-radius: 999px;               /* huge radius = fully rounded ends */
+  font: 600 0.78rem/1 var(--body);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s;  /* smooth hover change */
+}
+/* Hover on a white background: fill with black */
+.btn:hover { background: var(--black); color: var(--white); border-color: var(--black); transform: translateY(-2px); }
+/* Hover on a black background: fill with white instead */
+.dark .btn:hover,
+.hero .btn:hover { background: var(--white); color: var(--black); border-color: var(--white); }
+/* Filled version */
+.btn-solid { background: var(--black); color: var(--white); border-color: var(--black); }
+.btn-solid:hover { background: transparent; color: var(--black); }
+/* Greyed out while the form is sending */
+.btn[disabled] { opacity: 0.55; cursor: progress; transform: none; }
+
+
+/* ====================================================================
+   5. HEADER AND MENU
+   The black bar at the top of every page. It stays visible while
+   scrolling (position: sticky).
+   ==================================================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;                  /* keeps the header above other content */
+  background: var(--black);
+  color: var(--white);
+}
+
+/* Inner box that lines up the logo (left) and menu (right) */
+.header-inner {
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding: 14px 24px;
+  display: flex;                  /* puts logo and menu side by side */
+  align-items: center;
+  justify-content: space-between; /* logo far left, menu far right */
+}
+
+/* ---- Logo (your name) ---- */
+.logo {
+  font-family: var(--display);
+  font-size: 1.9rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+/* The small white dot after the name (an empty <span> drawn with CSS) */
+.logo span { display: inline-block; width: 0.28em; height: 0.28em; margin-left: 0.12em; border-radius: 50%; background: currentColor; }
+
+/* ---- Menu links ---- */
+.site-nav { display: flex; gap: 32px; }
+.site-nav a {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--grey-light);
+  padding: 6px 0;
+  border-bottom: 1.5px solid transparent;   /* invisible underline, shown on hover */
+  transition: color 0.2s, border-color 0.2s;
+}
+/* Hovered link, and the link for the page you are currently on */
+.site-nav a:hover,
+.site-nav a[aria-current="page"] { color: var(--white); border-color: var(--white); }
+
+/* ---- Three-line phone menu button (hidden on desktop, see section 16) ---- */
+.nav-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+}
+/* Each of the three lines */
+.nav-toggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  margin: 5px auto;
+  background: currentColor;
+  transition: transform 0.25s, opacity 0.25s;
+}
+/* When the menu is open, the three lines turn into an X */
+.nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+
+/* ====================================================================
+   6. SHARED SECTION HELPERS
+   Classes you add to a <section> to control its spacing and colour.
+   ==================================================================== */
+
+/* .section: standard vertical spacing between page sections */
+.section { padding: 96px 0; scroll-margin-top: 70px; }  /* scroll-margin keeps anchors clear of the sticky header */
+
+/* .dark: black background with white text */
+.dark { background: var(--black); color: var(--white); }
+
+/* .paper: very light grey background (available if you want a tinted section) */
+.paper { background: var(--paper); }
+
+/* .split: two equal columns side by side (collapses to one column on phones) */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;   /* two columns of equal width */
+  gap: 72px;                        /* space between the columns */
+  align-items: center;              /* vertically centre both columns */
+}
+
+
+/* ====================================================================
+   7. HOME: HERO
+   The black area at the top of the home page. Photo on the LEFT,
+   name on the RIGHT. The photo hangs down over the white section below.
+   ==================================================================== */
+.hero {
+  background: var(--black);
+  color: var(--white);
+  padding-top: 64px;
+  position: relative;
+  z-index: 2;      /* lets the photo sit on top of the next section */
+}
+
+/* Two columns: [photo] [name]. "auto" = as wide as the photo needs, "1fr" = the rest */
+.hero-inner {
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: 24px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 64px;
+}
+
+/* ---- The photo ---- */
+.hero-photo {
+  position: relative;
+  width: 300px;
+  margin-bottom: -120px;     /* NEGATIVE margin pulls the photo down over the white section */
+}
+.hero-photo img {
+  width: 100%;
+  aspect-ratio: 3 / 4;       /* portrait shape */
+  object-fit: cover;         /* crops the photo to fill the shape without stretching */
+  background: #d9d9d9;
+  border-radius: 6px 6px 150px 150px;   /* corners: top-left, top-right, bottom-right, bottom-left. Big bottom radius = rounded "arch" bottom */
+}
+/* The thin ring drawn around the photo (decoration only) */
+.hero-photo::after {
+  content: "";
+  position: absolute;
+  inset: -14px;              /* extends the ring 14px beyond the photo on all sides */
+  border: 1.5px solid rgba(255, 255, 255, 0.28);
+  border-radius: 14px 14px 164px 164px;
+  pointer-events: none;      /* the ring never blocks clicks */
+}
+
+/* ---- The name and role ---- */
+.hero h1 { padding-bottom: 72px; }   /* lifts the text up a little, balancing the photo overhang */
+.hero-name {
+  display: block;
+  font-size: clamp(4.5rem, 12vw, 10rem);   /* clamp(min, ideal, max): grows with the screen but stays within limits */
+}
+.hero-role {
+  display: block;
+  margin-top: 10px;
+  font-size: clamp(1.8rem, 5vw, 3.6rem);
+  color: transparent;                       /* transparent fill + white stroke = outlined text */
+  -webkit-text-stroke: 1.5px var(--white);
+  letter-spacing: 0.05em;
+}
+
+
+/* ====================================================================
+   8. HOME: ABOUT
+   ==================================================================== */
+.about { padding-top: 200px; }   /* extra top space so the hanging photo doesn't cover the heading */
+.about h2 { font-size: clamp(3.6rem, 8vw, 6.6rem); }
+
+/* Small headings reused in a few places ("About me") */
+.about h3,
+.section-title-sm {
+  font-family: var(--display);
+  font-size: 2.6rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.about p { color: var(--grey); margin-bottom: 18px; max-width: 52ch; }  /* 52ch = about 52 characters wide: comfortable to read */
+.about .btn { margin-top: 12px; }
+
+
+/* ====================================================================
+   9. HOME: EDUCATION
+   Black section with a vertical line down the left of the entries.
+   ==================================================================== */
+.education h2 { font-size: clamp(3.4rem, 8vw, 6.4rem); }
+
+/* .timeline: the list of entries. The left border is the vertical line */
+.timeline { border-left: 1px solid #3a3a3a; padding-left: 36px; display: grid; gap: 40px; }
+.timeline-date { font-family: var(--display); font-size: 2.1rem; line-height: 1; letter-spacing: 0.04em; margin-bottom: 8px; }
+.timeline h3 { font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+.timeline p { color: var(--grey-light); font-size: 0.95rem; max-width: 44ch; }
+
+
+/* ====================================================================
+   10. HOME: PROJECT CARDS
+   The arch-shaped cards (flat top, big rounded bottom).
+   ==================================================================== */
+
+/* Heading row above the cards: title on the left, button on the right */
+.section-head { display: flex; justify-content: space-between; align-items: end; gap: 32px; flex-wrap: wrap; margin-bottom: 56px; }
+.section-head h2 { font-size: clamp(3.4rem, 8vw, 6.4rem); }
+.section-head p { color: var(--grey); max-width: 46ch; margin-top: 14px; }
+
+/* .arch-grid: lays the cards in a row.
+   repeat(auto-fit, minmax(250px, 1fr)) = "fit as many columns as possible,
+   each at least 250px wide". That is what makes it responsive. */
+.arch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 32px;
+  align-items: start;
+}
+
+/* .arch-card: one card. The two-part border-radius below creates the arch:
+   16px rounded top corners, and a bottom curve that is 50% of the width
+   across and 110px tall. */
+.arch-card {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  text-decoration: none;
+  background: var(--mist);
+  border-radius: 18px 18px 50% 50% / 18px 18px 110px 110px;
+  overflow: hidden;       /* clips the image to the rounded corners */
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+/* Hover: lift the card up and add a soft shadow */
+.arch-card:hover { transform: translateY(-8px); box-shadow: 0 22px 40px rgba(0, 0, 0, 0.16); }
+
+/* The screenshot at the top of the card (cropped from the top) */
+.arch-card img { width: 100%; aspect-ratio: 5 / 4; object-fit: cover; object-position: top; background: #ddd; }
+
+/* The text area. The big bottom padding leaves room for the curve */
+.arch-body { padding: 22px 28px 76px; }
+.arch-body h3 { font-family: var(--display); font-size: 2.1rem; line-height: 1; letter-spacing: 0.02em; text-transform: uppercase; }
+.arch-tags { margin: 8px 0 10px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); }
+.arch-body p:not(.arch-tags) { font-size: 0.92rem; color: var(--grey); }
+.arch-link { display: inline-block; margin-top: 14px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; border-bottom: 1.5px solid currentColor; }
+
+
+/* ====================================================================
+   11. CALL-TO-ACTION BAND
+   The black strip with a headline and a button, above the footer.
+   (It also has class="dark" in the HTML, which gives it the black background.)
+   ==================================================================== */
+.cta { text-align: center; padding: 96px 0; }
+.cta h2 { font-size: clamp(3rem, 8vw, 6rem); margin-bottom: 28px; }
+
+
+/* ====================================================================
+   12. FOOTER
+   ==================================================================== */
+.site-footer { background: var(--black); color: var(--grey-light); border-top: 1px solid #262626; font-size: 0.85rem; }
+.footer-inner { max-width: var(--wrap); margin-inline: auto; padding: 28px 24px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.footer-links { display: flex; gap: 22px; }
+.footer-links a { text-decoration: none; }
+.footer-links a:hover { color: var(--white); }
+
+
+/* ====================================================================
+   13. PAGE BANNER
+   The black title area at the top of the Projects and Contact pages.
+   ==================================================================== */
+.page-hero { background: var(--black); color: var(--white); padding: 80px 0 72px; }
+.page-hero h1 { font-size: clamp(3.8rem, 11vw, 8.5rem); }
+.page-hero p { margin-top: 20px; max-width: 54ch; color: var(--grey-light); }
+
+/* .pills: the row of jump buttons under the Projects banner title */
+.pills { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.pills a {
+  padding: 9px 20px;
+  border: 1.5px solid #4a4a4a;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--white);
+  transition: background 0.2s, color 0.2s;
+}
+.pills a:hover { background: var(--white); color: var(--black); }
+
+
+/* ====================================================================
+   14. PROJECTS PAGE
+   ==================================================================== */
+
+/* ---- One project block ---- */
+.project { padding: 88px 0; scroll-margin-top: 60px; border-top: 1px solid var(--line); }
+/* Alternating backgrounds: projects 1 and 3 get light grey, project 2 stays white.
+   (It counts every <section> in <main>, and the page banner is the first one.) */
+.project:nth-of-type(even) { background: var(--paper); }
+
+/* Top of a project: title on the left, description on the right */
+.project-head { display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; margin-bottom: 56px; }
+
+/* The big outlined number ("01") */
+.project-num { font-family: var(--display); font-size: 5rem; line-height: 1; color: transparent; -webkit-text-stroke: 1.5px var(--black); }
+.project h2 { font-size: clamp(3rem, 6vw, 4.8rem); margin-top: 4px; }
+
+/* The description paragraph */
+.project-copy p { color: var(--grey); max-width: 60ch; }
+
+/* ---- Screenshot gallery ----
+   Same auto-fit trick as the cards: as many columns as fit, each at least 190px. */
+.gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 24px; align-items: start; }
+.gallery figure { display: grid; gap: 10px; }
+
+/* The clickable wrapper around each screenshot */
+.shot-btn { padding: 0; border: 0; background: none; cursor: zoom-in; display: block; width: 100%; border-radius: 22px; }
+.shot-btn img {
+  width: 100%;
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: var(--mist);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+/* Hover: lift the screenshot slightly */
+.shot-btn:hover img { transform: translateY(-5px); box-shadow: 0 18px 32px rgba(0, 0, 0, 0.16); }
+
+/* The small caption under each screenshot */
+.gallery figcaption { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); text-align: center; }
+
+/* .gallery-3: a gallery for exactly three phone screens, kept centred */
+.gallery-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 280px)); justify-content: center; }
+
+/* ---- Lightbox: the dark pop-up that enlarges a screenshot ----
+   It covers the whole screen (position: fixed; inset: 0). The "hidden"
+   attribute in the HTML hides it until script.js shows it. */
+.lightbox {
+  position: fixed;
+  inset: 0;                         /* shorthand for top/right/bottom/left = 0 */
+  z-index: 200;                     /* above everything, even the header */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.9);   /* black at 90% opacity */
+  cursor: zoom-out;
+}
+.lightbox[hidden] { display: none; }    /* makes the "hidden" attribute really hide it */
+.lightbox img { max-width: 100%; max-height: 88vh; border-radius: 22px; background: var(--white); }  /* 88vh = 88% of the screen height */
+.lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  border: 1.5px solid var(--white);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--white);
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.lightbox-close:hover { background: var(--white); color: var(--black); }
+
+
+/* ====================================================================
+   15. CONTACT PAGE
+   ==================================================================== */
+
+/* Two columns: details (narrower) and form (wider) */
+.contact-grid { display: grid; grid-template-columns: 0.9fr 1.3fr; gap: 72px; align-items: start; }
+
+/* ---- Left column: email and links ---- */
+.contact-info h2 { font-size: clamp(2.8rem, 6vw, 4.4rem); margin-bottom: 20px; }
+.contact-info > p { color: var(--grey); max-width: 38ch; margin-bottom: 32px; }
+.contact-list { display: grid; gap: 22px; }
+.contact-list dt { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--grey); }
+.contact-list dd { margin: 2px 0 0; font-weight: 600; }
+.contact-list a { text-underline-offset: 4px; }
+
+/* ---- Right column: the card that holds the form ---- */
+.form-card { border: 1.5px solid var(--black); border-radius: 24px; padding: 40px; }
+
+/* One field = label + input + error message */
+.field { margin-bottom: 22px; }
+.field label { display: block; margin-bottom: 8px; font-size: 0.74rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
+.field label .req { color: var(--grey); }   /* the * after a label */
+
+/* All text boxes, the drop-down and the message box share one look */
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 14px 16px;
+  font: inherit;
+  color: var(--black);
+  background: var(--white);
+  border: 1.5px solid #9a9a9a;
+  border-radius: 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+/* The drop-down arrow is drawn with two tiny gradients (CSS-only arrow) */
+.field select {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--black) 50%), linear-gradient(135deg, var(--black) 50%, transparent 50%);
+  background-position: calc(100% - 22px) 55%, calc(100% - 16px) 55%;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 44px;
+}
+.field textarea { min-height: 150px; resize: vertical; }   /* can be dragged taller, not wider */
+
+/* When a field is clicked or tabbed into */
+.field input:focus,
+.field select:focus,
+.field textarea:focus { outline: none; border-color: var(--black); box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.14); }
+
+/* ---- ERROR STATE ----
+   script.js adds the class "invalid" to a .field when its value is wrong.
+   These rules turn the border red. The message text itself is .field-error. */
+.field.invalid input,
+.field.invalid select,
+.field.invalid textarea { border-color: var(--error); }
+.field.invalid input:focus,
+.field.invalid select:focus,
+.field.invalid textarea:focus { box-shadow: 0 0 0 3px rgba(192, 24, 45, 0.2); }
+
+/* The red error message under a field. Empty = takes no space. */
+.field-error { min-height: 0; margin-top: 6px; font-size: 0.84rem; color: var(--error); }
+.field-error:not(:empty)::before { content: "! "; font-weight: 600; }   /* adds a "!" before any message */
+
+/* Row under the message box: error on the left, character counter on the right */
+.field-foot { display: flex; justify-content: space-between; gap: 12px; }
+.counter { margin-top: 6px; font-size: 0.78rem; color: var(--grey); white-space: nowrap; }
+
+/* Send button + status line */
+.form-actions { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 8px; }
+.form-status { font-size: 0.9rem; }
+.form-status.error { color: var(--error); font-weight: 600; }
+
+/* ---- SUCCESS MESSAGE (shown after a valid send) ---- */
+.form-success { text-align: center; padding: 24px 0; }
+.form-success[hidden] { display: none; }
+.tick { width: 72px; height: 72px; margin: 0 auto 20px; display: grid; place-items: center; border: 2px solid var(--black); border-radius: 50%; font-size: 2rem; line-height: 1; }
+.form-success h3 { font-family: var(--display); font-size: 2.6rem; line-height: 1; text-transform: uppercase; margin-bottom: 12px; }
+.form-success p { color: var(--grey); max-width: 44ch; margin: 0 auto 24px; }
+
+
+/* ====================================================================
+   16. RESPONSIVE RULES
+   A "media query" applies its rules ONLY when the screen matches the
+   condition. max-width: 860px means "screens 860px wide or narrower"
+   (tablets and phones). These rules override the earlier ones.
+   ==================================================================== */
+
+/* ---------- Tablet and phone (860px and narrower) ---------- */
+@media (max-width: 860px) {
+  .section { padding: 72px 0; }
+
+  /* Two-column layouts become one column */
+  .split,
+  .project-head,
+  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+
+  /* Hero: one centred column. "order" decides which item comes first:
+     the name (order 1) goes above the photo (order 2) */
+  .hero { padding-top: 48px; }
+  .hero-inner { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 36px; }
+  .hero h1 { order: 1; padding-bottom: 0; }
+  .hero-photo { order: 2; width: 240px; margin-bottom: -90px; }
+  .about { padding-top: 130px; }
+
+  .form-card { padding: 28px 22px; }
+}
+
+/* ---------- Desktop only (861px and wider) ---------- */
+@media (min-width: 861px) {
+  /* Drops the middle project card lower for a staggered look */
+  .arch-grid .arch-card:nth-child(2) { margin-top: 56px; }
+}
+
+/* ---------- Phone (720px and narrower): collapse the menu ---------- */
+@media (max-width: 720px) {
+  .nav-toggle { display: block; }       /* show the three-line button */
+
+  /* The menu becomes a dropdown panel under the header, hidden until opened */
+  .site-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    padding: 8px 24px 20px;
+    background: var(--black);
+    border-top: 1px solid #262626;
+  }
+  .site-nav.open { display: flex; }     /* script.js adds "open" when the button is pressed */
+  .site-nav a { padding: 14px 0; border-bottom: 1px solid #262626; }
+}
+
+
+/* ====================================================================
+   17. REDUCED MOTION
+   Some people switch on "reduce motion" in their device settings.
+   This turns off animations and smooth scrolling for them.
+   ==================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}

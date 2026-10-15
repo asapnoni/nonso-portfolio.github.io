@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<!--
+  ====================================================================
+  HOME PAGE  (index.html)
+  ====================================================================
+  HOW THIS FILE IS ORGANISED (top to bottom):
+    1. <head>            page title, description, link to style.css
+    2. HEADER            logo + menu (same on every page)
+    3. HERO              photo on the left, name on the right
+    4. ABOUT             "Hello! My name is Nonso" + short bio
+    5. EDUCATION         black section with a small timeline
+    6. PROJECTS          three arch-shaped cards that link to projects.html
+    7. CALL TO ACTION    black band with a button to the contact page
+    8. FOOTER            copyright + small links
+    9. <script>          script.js (menu behaviour)
+
+  TIP: Use your editor's search (Ctrl+F) for "TODO" to find every
+  place you need to put in your own details.
+  ====================================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Makes the page scale properly on phones -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- The text shown in the browser tab and in Google results -->
+  <title>Nonso | UI/UX Designer</title>
+  <meta name="description" content="Portfolio of Nonso, a UI/UX designer and frontend developer. See my projects and get in touch.">
+
+  <!-- All the styling lives in this one file -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Lets keyboard users jump straight past the menu. Hidden until focused. -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+
+  <!-- ==============================================================
+       HEADER  (sticky bar at the top of every page)
+       Contains: logo on the left, menu links on the right.
+       On phones the links collapse into the three-line button.
+       If you add a new page, add its link in the <nav> below
+       AND in the header of the other pages.
+       ============================================================== -->
+  <header class="site-header">
+    <div class="header-inner">
+
+      <!-- Logo / name. Clicking it returns to the home page -->
+      <a href="index.html" class="logo" aria-label="Nonso, home">Nonso<span></span></a>
+
+      <!-- Three-line menu button: only visible on phones (see style.css, section 16) -->
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <!-- The menu links. "#about" scrolls to the About section on this page -->
+      <nav id="site-nav" class="site-nav" aria-label="Main">
+        <a href="#about">About</a>
+        <a href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+
+    </div>
+  </header>
+  <!-- END OF HEADER -->
+
+
+  <!-- Everything between <main> and </main> is the page's main content -->
+  <main id="main">
+
+    <!-- ==============================================================
+         HERO  (top section with the big name)
+         Layout: photo on the LEFT, name + role on the RIGHT.
+         Styles: style.css section 7.
+         ============================================================== -->
+    <section class="hero">
+      <div class="hero-inner">
+
+        <!-- Profile photo (the arch shape comes from CSS, not from the image) -->
+        <div class="hero-photo">
+          <!-- TODO: put your photo in the images folder, then change the src below,
+                     for example src="images/nonso.jpg". A portrait photo (3:4 shape) works best. -->
+          <img src="images/profile-placeholder.svg" alt="Portrait of Nonso" width="600" height="800">
+        </div>
+
+        <!-- Name and role. The second <span> is drawn as outlined text by CSS -->
+        <h1 class="display">
+          <span class="hero-name">Nonso</span>
+          <span class="hero-role">UI/UX Designer</span>
+        </h1>
+
+      </div>
+    </section>
+    <!-- END OF HERO -->
+
+
+    <!-- ==============================================================
+         ABOUT  (white section, big heading on the left, text on the right)
+         The id="about" lets the "About" menu link scroll here.
+         Styles: style.css section 8.
+         ============================================================== -->
+    <section id="about" class="section about">
+      <div class="wrap split">
+
+        <!-- Left column: the big greeting -->
+        <h2 class="display">Hello! My name is Nonso</h2>
+
+        <!-- Right column: bio text and a button -->
+        <div>
+          <h3>About me</h3>
+          <!-- TODO: rewrite these two paragraphs in your own words -->
+          <p>
+            I'm a Computer Science student at the University of Calabar who designs and builds
+            digital products. I work across UI/UX design, frontend development and Python,
+            and I enjoy turning a rough idea into an interface that is clear and easy to use.
+          </p>
+          <p>
+            I'm building a portfolio that shows how I think, from wireframes to finished screens,
+            with a longer-term goal in software engineering and game development.
+          </p>
+          <a class="btn" href="contact.html">Let's talk</a>
+        </div>
+
+      </div>
+    </section>
+    <!-- END OF ABOUT -->
+
+
+    <!-- ==============================================================
+         EDUCATION  (black section with a vertical timeline)
+         To add another entry, copy one <div> inside .timeline.
+         Styles: style.css section 9.
+         ============================================================== -->
+    <section id="education" class="section dark education">
+      <div class="wrap split">
+
+        <!-- Left column: heading -->
+        <h2 class="display">Education background</h2>
+
+        <!-- Right column: timeline entries (each <div> is one entry) -->
+        <div class="timeline">
+
+          <!-- Entry 1 -->
+          <div>
+            <p class="timeline-date">Present</p>
+            <h3>B.Sc. Computer Science</h3>
+            <p>University of Calabar, Nigeria. Currently in 300 level.</p>
+          </div>
+
+          <!-- Entry 2 -->
+          <div>
+            <p class="timeline-date">Ongoing</p>
+            <h3>UI/UX design and frontend development</h3>
+            <p>Self-directed learning in Figma, HTML, CSS and JavaScript, alongside Python.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+    <!-- END OF EDUCATION -->
+
+
+    <!-- ==============================================================
+         PROJECTS  (preview cards that link to the Projects page)
+         Each <a class="arch-card"> is one card. The part after the #
+         in href (for example #food-app) jumps to that project on
+         projects.html, so it must match the id of the project there.
+         To add a card: copy one <a class="arch-card">…</a> block.
+         Styles: style.css section 10.
+         ============================================================== -->
+    <section id="projects" class="section">
+      <div class="wrap">
+
+        <!-- Heading row: title + short text on the left, button on the right -->
+        <div class="section-head">
+          <div>
+            <h2 class="display">Previous projects</h2>
+            <p>A few of my most recent mobile app designs. Open any project to see every screen.</p>
+          </div>
+          <a class="btn btn-solid" href="projects.html">View all projects</a>
+        </div>
+
+        <!-- The row of cards -->
+        <div class="arch-grid">
+
+          <!-- Card 1: Food Ordering App -->
+          <a class="arch-card" href="projects.html#food-app">
+            <img src="images/food-app/home-fast-food.png" alt="Home screen of the food ordering app showing a promo banner and menu items" width="430" height="1433" loading="lazy">
+            <div class="arch-body">
+              <h3>Food Ordering App</h3>
+              <p class="arch-tags">Mobile UI · Figma</p>
+              <p>Browse, search and order meals from a bold black and white interface.</p>
+              <span class="arch-link">View project</span>
+            </div>
+          </a>
+
+          <!-- Card 2: Musica -->
+          <a class="arch-card" href="projects.html#musica">
+            <img src="images/musica/login.png" alt="Musica login screen with an illustrated instrument pattern background" width="430" height="932" loading="lazy">
+            <div class="arch-body">
+              <h3>Musica</h3>
+              <p class="arch-tags">Sign-up and login · Figma</p>
+              <p>Illustrated onboarding screens for a music app.</p>
+              <span class="arch-link">View project</span>
+            </div>
+          </a>
+
+          <!-- Card 3: Checkout Flow -->
+          <a class="arch-card" href="projects.html#checkout">
+            <img src="images/checkout/cart.png" alt="Shopping cart screen listing three products with a subtotal and checkout button" width="430" height="932" loading="lazy">
+            <div class="arch-body">
+              <h3>Checkout Flow</h3>
+              <p class="arch-tags">E-commerce · Figma</p>
+              <p>A four-step journey from cart to payment confirmation.</p>
+              <span class="arch-link">View project</span>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+    <!-- END OF PROJECTS -->
+
+
+    <!-- ==============================================================
+         CALL TO ACTION  (black band just above the footer)
+         Styles: style.css section 11.
+         ============================================================== -->
+    <section class="dark cta">
+      <div class="wrap">
+        <h2 class="display">Have a project in mind?</h2>
+        <a class="btn" href="contact.html">Get in touch</a>
+      </div>
+    </section>
+    <!-- END OF CALL TO ACTION -->
+
+  </main>
+
+
+  <!-- ==============================================================
+       FOOTER  (bottom of every page)
+       The year updates by itself: script.js fills in <span data-year>.
+       ============================================================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>&copy; <span data-year>2026</span> Nonso. All rights reserved.</p>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </footer>
+  <!-- END OF FOOTER -->
+
+
+  <!-- JavaScript for this page (mobile menu, footer year). Keep this last. -->
+  <script src="script.js"></script>
+</body>
+</html>

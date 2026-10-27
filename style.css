@@ -1,0 +1,562 @@
+/* Nonso's portfolio: black and white theme.
+
+   Colours, fonts and the content width are variables in :root below, so you can
+   restyle the whole site from there.
+
+   Sections, in order: variables, reset, shared pieces (headings, buttons), header,
+   section helpers, hero, about, education, project cards, call to action, footer,
+   page banner, projects page, contact page, responsive rules, reduced motion. */
+
+
+/* ---------- Variables ---------- */
+:root {
+  --black: #0c0c0c;        /* dark sections, buttons, text */
+  --white: #ffffff;
+  --paper: #f5f5f5;        /* light grey: alternate project blocks */
+  --mist: #ebebeb;         /* light grey: project card background */
+  --line: #d6d6d6;         /* dividers and borders */
+  --grey: #6b6b6b;         /* secondary text on white */
+  --grey-light: #b3b3b3;   /* secondary text on black */
+  --error: #c0182d;        /* form errors only */
+
+  /* No font files: the browser uses the first font in each list that the device has. */
+  --display: "Arial Narrow", Arial, sans-serif;                 /* headings */
+  --body: system-ui, "Segoe UI", Roboto, Arial, sans-serif;     /* paragraphs */
+
+  --wrap: 1120px;          /* maximum content width */
+}
+
+
+/* ---------- Reset and base ---------- */
+
+/* Width includes padding and border, so sizes behave predictably. */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--body);
+  color: var(--black);
+  background: var(--white);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Remove the browser's default gaps, bullets and blue links. */
+img { display: block; max-width: 100%; height: auto; }
+h1, h2, h3, p, ul, dl, figure { margin: 0; }
+ul { padding: 0; list-style: none; }
+a { color: inherit; }
+
+/* The outline shown when someone tabs through the page. */
+:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+
+/* Centres content and stops it getting too wide on big screens. */
+.wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 24px; }
+
+/* Hidden off-screen until a keyboard user focuses it. */
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 100;
+  background: var(--white);
+  color: var(--black);
+  padding: 10px 16px;
+  border-radius: 8px;
+}
+.skip-link:focus { top: 12px; }
+
+
+/* ---------- Shared pieces ---------- */
+
+/* Big, tall, uppercase heading style. */
+.display {
+  font-family: var(--display);
+  text-transform: uppercase;
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+}
+
+/* One size for every big home-page section heading (smaller sizes are in the responsive rules). */
+.about h2,
+.education h2,
+.section-head h2,
+.cta h2 { font-size: 4.6rem; }
+
+/* Tiny label above a heading. */
+.eyebrow {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+.dark .eyebrow,
+.hero .eyebrow { color: var(--grey-light); }
+
+/* Pill button, outlined by default. Add "btn-solid" for a filled one. */
+.btn {
+  display: inline-block;
+  padding: 0.85rem 2rem;
+  border: 1.5px solid currentColor;   /* matches the text colour */
+  border-radius: 999px;
+  font-family: var(--body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+.btn:hover { background: var(--black); color: var(--white); border-color: var(--black); transform: translateY(-2px); }
+/* On black backgrounds the hover fills with white instead. */
+.dark .btn:hover,
+.hero .btn:hover { background: var(--white); color: var(--black); border-color: var(--white); }
+.btn-solid { background: var(--black); color: var(--white); border-color: var(--black); }
+.btn-solid:hover { background: transparent; color: var(--black); }
+/* While the form is sending. */
+.btn[disabled] { opacity: 0.55; cursor: progress; transform: none; }
+
+
+/* ---------- Header and menu ---------- */
+
+/* Stays at the top while scrolling. z-index keeps it above the content. */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--black);
+  color: var(--white);
+}
+
+.header-inner {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.9rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+/* The dot after the name is an empty <span> drawn as a circle. */
+.logo span { display: inline-block; width: 0.28em; height: 0.28em; margin-left: 0.12em; border-radius: 50%; background: currentColor; }
+
+.site-nav { display: flex; gap: 32px; }
+.site-nav a {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--grey-light);
+  padding: 6px 0;
+  border-bottom: 1.5px solid transparent;   /* invisible until hover, so nothing shifts */
+  transition: color 0.2s, border-color 0.2s;
+}
+/* Hovered link, and the link for the current page (aria-current="page" in the HTML). */
+.site-nav a:hover,
+.site-nav a[aria-current="page"] { color: var(--white); border-color: var(--white); }
+
+/* Three-line menu button. Hidden on desktop, shown on phones. */
+.nav-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+}
+.nav-toggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  margin: 5px auto;
+  background: currentColor;
+  transition: transform 0.25s, opacity 0.25s;
+}
+/* Open menu: the three lines turn into an X. */
+.nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+
+/* ---------- Section helpers ---------- */
+
+/* scroll-margin keeps anchor targets clear of the sticky header. */
+.section { padding: 96px 0; scroll-margin-top: 70px; }
+.dark { background: var(--black); color: var(--white); }
+.paper { background: var(--paper); }
+
+/* Two equal columns. They stack on tablets and phones. */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  align-items: center;
+}
+
+
+/* ---------- Home: hero ---------- */
+
+/* Photo on the left, name on the right. The photo hangs down over the About section. */
+.hero {
+  background: var(--black);
+  color: var(--white);
+  padding-top: 64px;
+  position: relative;
+  z-index: 2;      /* keeps the hanging photo above the next section */
+}
+
+/* "auto" = as wide as the photo, "1fr" = all the remaining space. */
+.hero-inner {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 64px;
+}
+
+.hero-photo {
+  position: relative;
+  width: 300px;
+  margin-bottom: -120px;     /* negative margin pulls the photo down over the next section */
+}
+.hero-photo img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;         /* crops to fill the shape without stretching */
+  background: #d9d9d9;
+  border-radius: 6px 6px 150px 150px;   /* big bottom corners make the arch */
+}
+/* Decorative ring: a box 14px bigger than the photo on every side. */
+.hero-photo::after {
+  content: "";
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  bottom: -14px;
+  left: -14px;
+  border: 1.5px solid rgba(255, 255, 255, 0.28);
+  border-radius: 14px 14px 164px 164px;   /* photo radius (150px) + the 14px gap */
+  pointer-events: none;                    /* never blocks clicks */
+}
+
+.hero h1 { padding-bottom: 72px; }   /* balances the photo overhang */
+.hero-name {
+  display: block;
+  font-size: 7rem;
+}
+.hero-role {
+  display: block;
+  margin-top: 10px;
+  font-size: 2.8rem;
+  color: transparent;                       /* transparent fill + white stroke = outlined text */
+  -webkit-text-stroke: 1.5px var(--white);
+  letter-spacing: 0.05em;
+}
+
+
+/* ---------- Home: about ---------- */
+
+.about { padding-top: 200px; }   /* room for the hanging hero photo */
+
+.about h3,
+.section-title-sm {
+  font-family: var(--display);
+  font-size: 2.6rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.about p { color: var(--grey); margin-bottom: 18px; max-width: 520px; }
+.about .btn { margin-top: 12px; }
+
+
+/* ---------- Home: education ---------- */
+
+/* The vertical line is the left border of the list. */
+.timeline { border-left: 1px solid #3a3a3a; padding-left: 36px; display: grid; gap: 40px; }
+.timeline-date { font-family: var(--display); font-weight: 700; font-size: 2.1rem; line-height: 1; letter-spacing: 0.04em; margin-bottom: 8px; }
+.timeline h3 { font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+.timeline p { color: var(--grey-light); font-size: 0.95rem; max-width: 440px; }
+
+
+/* ---------- Home: project cards ---------- */
+
+.section-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; margin-bottom: 56px; }
+.section-head p { color: var(--grey); max-width: 460px; margin-top: 14px; }
+
+.arch-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* The arch: small rounded top corners, and a bottom curve 50% of the width across and 110px tall. */
+.arch-card {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  text-decoration: none;
+  background: var(--mist);
+  border-radius: 18px 18px 50% 50% / 18px 18px 110px 110px;
+  overflow: hidden;       /* clips the image to the curve */
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.arch-card:hover { transform: translateY(-8px); box-shadow: 0 22px 40px rgba(0, 0, 0, 0.16); }
+
+/* Tall screenshots are cropped from the top. */
+.arch-card img { width: 100%; aspect-ratio: 5 / 4; object-fit: cover; object-position: top; background: #ddd; }
+
+/* The big bottom padding leaves room for the curve. */
+.arch-body { padding: 22px 28px 76px; }
+.arch-body h3 { font-family: var(--display); font-size: 2.1rem; line-height: 1; letter-spacing: 0.02em; text-transform: uppercase; }
+.arch-body p { font-size: 0.92rem; color: var(--grey); }
+.arch-body .arch-tags { margin: 8px 0 10px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
+.arch-link { display: inline-block; margin-top: 14px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; border-bottom: 1.5px solid currentColor; }
+
+
+/* ---------- Call to action ---------- */
+
+.cta { text-align: center; padding: 96px 0; }
+.cta h2 { margin-bottom: 28px; }
+
+
+/* ---------- Footer ---------- */
+
+.site-footer { background: var(--black); color: var(--grey-light); border-top: 1px solid #262626; font-size: 0.85rem; }
+.footer-inner { max-width: var(--wrap); margin: 0 auto; padding: 28px 24px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.footer-links { display: flex; gap: 22px; }
+.footer-links a { text-decoration: none; }
+.footer-links a:hover { color: var(--white); }
+
+
+/* ---------- Page banner (Projects and Contact pages) ---------- */
+
+.page-hero { background: var(--black); color: var(--white); padding: 80px 0 72px; }
+.page-hero h1 { font-size: 6.2rem; }
+.page-hero p { margin-top: 20px; max-width: 540px; color: var(--grey-light); }
+
+/* Jump buttons under the Projects title. */
+.pills { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.pills a {
+  padding: 9px 20px;
+  border: 1.5px solid #4a4a4a;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--white);
+  transition: background 0.2s, color 0.2s;
+}
+.pills a:hover { background: var(--white); color: var(--black); }
+
+
+/* ---------- Projects page ---------- */
+
+.project { padding: 88px 0; scroll-margin-top: 60px; border-top: 1px solid var(--line); }
+/* Alternate backgrounds: projects 1 and 3 are light grey, project 2 stays white. */
+#food-app,
+#checkout { background: var(--paper); }
+
+/* Title on the left, description on the right. */
+.project-head { display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; margin-bottom: 56px; }
+
+.project-num { font-family: var(--display); font-weight: 700; font-size: 5rem; line-height: 1; color: transparent; -webkit-text-stroke: 1.5px var(--black); }
+.project h2 { font-size: 3.8rem; margin-top: 4px; }
+.project-copy p { color: var(--grey); max-width: 600px; }
+
+/* The second class in projects.html sets the columns. */
+.gallery { display: grid; gap: 24px; align-items: start; }
+.gallery-3 { grid-template-columns: 1fr 1fr 1fr; }
+.gallery-narrow { grid-template-columns: 280px 280px 280px; justify-content: center; }
+.gallery-5 { grid-template-columns: 1fr 1fr 1fr 1fr 1fr; }
+.gallery figure { display: grid; gap: 10px; }
+.gallery img { width: 100%; border-radius: 22px; border: 1px solid var(--line); background: var(--mist); }
+.gallery figcaption { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); text-align: center; }
+
+
+/* ---------- Contact page ---------- */
+
+.contact-grid { display: grid; grid-template-columns: 0.9fr 1.3fr; gap: 72px; align-items: start; }
+
+.contact-info h2 { font-size: 3.5rem; margin-bottom: 20px; }
+.contact-info > p { color: var(--grey); max-width: 380px; margin-bottom: 32px; }
+.contact-list { display: grid; gap: 22px; }
+.contact-list dt { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--grey); }
+.contact-list dd { margin: 2px 0 0; font-weight: 600; }
+.contact-list a { text-underline-offset: 4px; }
+
+.form-card { border: 1.5px solid var(--black); border-radius: 24px; padding: 40px; }
+
+/* One field = label + input + error message. */
+.field { margin-bottom: 22px; }
+.field label { display: block; margin-bottom: 8px; font-size: 0.74rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
+.field label .req { color: var(--grey); }
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 14px 16px;
+  font-family: inherit;   /* form controls ignore the page font unless told to copy it */
+  font-size: 1rem;
+  line-height: inherit;
+  color: var(--black);
+  background: var(--white);
+  border: 1.5px solid #9a9a9a;
+  border-radius: 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.field textarea { min-height: 150px; resize: vertical; }
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus { outline: none; border-color: var(--black); box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.14); }
+
+/* script.js adds "invalid" to a .field when its value is wrong. */
+.field.invalid input,
+.field.invalid select,
+.field.invalid textarea { border-color: var(--error); }
+.field.invalid input:focus,
+.field.invalid select:focus,
+.field.invalid textarea:focus { box-shadow: 0 0 0 3px rgba(192, 24, 45, 0.2); }
+
+/* Empty until script.js writes a message into it. */
+.field-error { min-height: 0; margin-top: 6px; font-size: 0.84rem; color: var(--error); }
+.field-error:not(:empty)::before { content: "! "; font-weight: 600; }
+
+/* Under the message box: error on the left, character counter on the right. */
+.field-foot { display: flex; justify-content: space-between; gap: 12px; }
+.counter { margin-top: 6px; font-size: 0.78rem; color: var(--grey); white-space: nowrap; }
+
+.form-actions { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 8px; }
+.form-status { font-size: 0.9rem; font-weight: 600; color: var(--error); }
+
+/* Shown instead of the form after a successful send. */
+.form-success { text-align: center; padding: 24px 0; }
+.form-success[hidden] { display: none; }
+.tick { width: 72px; height: 72px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--black); border-radius: 50%; font-size: 2rem; line-height: 1; }
+.form-success h3 { font-family: var(--display); font-size: 2.6rem; line-height: 1; text-transform: uppercase; margin-bottom: 12px; }
+.form-success p { color: var(--grey); max-width: 440px; margin: 0 auto 24px; }
+
+
+/* ---------- Responsive rules ----------
+   A media query applies only when the screen matches. Later rules override earlier ones. */
+
+/* Tablet and phone: 860px and narrower. */
+@media (max-width: 860px) {
+  .section { padding: 72px 0; }
+
+  .about h2,
+  .education h2,
+  .section-head h2,
+  .cta h2 { font-size: 3.4rem; }
+  .page-hero h1 { font-size: 4.6rem; }
+  .project h2 { font-size: 3.1rem; }
+  .contact-info h2 { font-size: 3rem; }
+  .hero-name { font-size: 5.5rem; }
+  .hero-role { font-size: 2.2rem; }
+
+  .arch-grid { grid-template-columns: 1fr 1fr; }
+  .gallery-3,
+  .gallery-narrow,
+  .gallery-5 { grid-template-columns: 1fr 1fr 1fr; }
+
+  /* Two-column layouts become one column. */
+  .split,
+  .project-head,
+  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+
+  /* Hero stacks and centres. "order" puts the name (1) above the photo (2). */
+  .hero { padding-top: 48px; }
+  .hero-inner { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 36px; }
+  .hero h1 { order: 1; padding-bottom: 0; }
+  .hero-photo { order: 2; width: 240px; margin-bottom: -90px; }
+  .about { padding-top: 130px; }
+
+  .form-card { padding: 28px 22px; }
+}
+
+/* Desktop only: 861px and wider. */
+@media (min-width: 861px) {
+  /* Drops the middle project card lower for a staggered look. */
+  .arch-grid .arch-card:nth-child(2) { margin-top: 56px; }
+}
+
+/* Phone: 720px and narrower. The menu collapses into the three-line button. */
+@media (max-width: 720px) {
+  .nav-toggle { display: block; }
+
+  .about h2,
+  .education h2,
+  .section-head h2,
+  .cta h2 { font-size: 2.7rem; }
+  .page-hero h1 { font-size: 3.2rem; }
+  .project h2 { font-size: 2.6rem; }
+  .contact-info h2 { font-size: 2.5rem; }
+  .hero-name { font-size: 4rem; }
+  .hero-role { font-size: 1.6rem; }
+
+  .gallery-3,
+  .gallery-narrow,
+  .gallery-5 { grid-template-columns: 1fr 1fr; }
+
+  /* The menu becomes a dropdown under the header. script.js adds "open" to show it. */
+  .site-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    padding: 8px 24px 20px;
+    background: var(--black);
+    border-top: 1px solid #262626;
+  }
+  .site-nav.open { display: flex; }
+  .site-nav a { padding: 14px 0; border-bottom: 1px solid #262626; }
+}
+
+/* Small phone: 560px and narrower. Everything in one column. */
+@media (max-width: 560px) {
+  .arch-grid,
+  .gallery-3,
+  .gallery-5 { grid-template-columns: 1fr; }
+  .gallery-narrow { grid-template-columns: 1fr; max-width: 280px; margin: 0 auto; }
+}
+
+
+/* ---------- Reduced motion ---------- */
+
+/* For visitors who turned on "reduce motion" in their device settings. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
